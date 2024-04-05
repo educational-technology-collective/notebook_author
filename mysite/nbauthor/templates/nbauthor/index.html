@@ -1,0 +1,12 @@
+{% if assignments %}
+<ul>
+  {% for assignment in assignments %}
+  <li>
+    <a href="/nbauthor/{{ assignment.id }}/">assignment {{ assignment.id }}</a>
+    <p>{{ assignment.description }}</p>
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>No assignments are available.</p>
+{% endif %}

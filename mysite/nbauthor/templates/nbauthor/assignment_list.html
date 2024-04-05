@@ -1,0 +1,22 @@
+{% load bootstrap5 %} {% block content %}
+<h1>Assignment List</h1>
+{% if assignment_list %}
+<ul>
+  {% for assignment in assignment_list %}
+  <li>
+    <a href="{% url 'nbauthor:assignment_detail' assignment.id %}"
+      >assignment {{ assignment.id }}</a
+    >
+    (<a href="{% url 'nbauthor:assignment_update' assignment.id %}">Update</a> |
+    <a href="{% url 'nbauthor:assignment_delete' assignment.id %}">Delete</a>)
+    <br />
+    {{ assignment.description }} {{ assignment.stub }}
+  </li>
+  {% endfor %}
+</ul>
+{% else %}
+<p>There are no assignments in the library.</p>
+{% endif %}
+
+<p><a href="{% url 'nbauthor:assignment_create' %}">Add an Assignment</a></p>
+{% endblock %}

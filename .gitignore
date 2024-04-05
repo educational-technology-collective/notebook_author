@@ -1,1 +1,5 @@
-/assignment*
+db/assignment*.ipynb
+
+__pycache__/
+
+migrations/
