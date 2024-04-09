@@ -19,8 +19,8 @@ const validateMessages = {
 const AssignmentForm = (props) => {
   const onFinish = async (values) => {
     console.log(values);
-    await props.updateAssignment(props.data.id, values)
-  };  
+    await props.updateAssignment(props.data.id, values);
+  };
   return (
     <>
       <Form
@@ -37,7 +37,7 @@ const AssignmentForm = (props) => {
           metadata_description: props.data.metadata_description,
           metadata_stub: props.data.metadata_stub,
         }}
-        labelAlign='right'
+        labelAlign="right"
       >
         <Form.Item name="course" label="Course">
           <Input />
@@ -46,29 +46,29 @@ const AssignmentForm = (props) => {
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <Input.TextArea
-            autoSize={{ minRows: 10 }}
-          />
+          <Input.TextArea autoSize={{ minRows: 10 }} />
         </Form.Item>
         <Form.Item name="stub" label="Stub">
-          <Input.TextArea
-            autoSize={{ minRows: 10 }}
-          />
+          <Input.TextArea autoSize={{ minRows: 10 }} />
         </Form.Item>
         <Flex justify="space-between">
-        <Form.Item name="metadata_description" label="Metadata - Description" style={{width: "45%"}}>
-          <Input.TextArea
-            autoSize={{ minRows: 5 }}
-          />
-        </Form.Item>
-        <Form.Item name="metadata_stub" label="Metadata - Stub" style={{width: "45%"}}>
-          <Input.TextArea
-            autoSize={{ minRows: 5 }}
-          />
-        </Form.Item>
+          <Form.Item
+            name="metadata_description"
+            label="Metadata - Description"
+            style={{ width: "45%" }}
+          >
+            <Input.TextArea autoSize={{ minRows: 5 }} />
+          </Form.Item>
+          <Form.Item
+            name="metadata_stub"
+            label="Metadata - Stub"
+            style={{ width: "45%" }}
+          >
+            <Input.TextArea autoSize={{ minRows: 5 }} />
+          </Form.Item>
         </Flex>
-        <Form.Item >
-          <Button type="primary" htmlType="submit" style={{width: "100%"}}>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
             Save Assignment
           </Button>
         </Form.Item>

@@ -16,52 +16,51 @@ function App() {
   const ENDPOINT = import.meta.env.VITE_API_URL;
   const COURSE_ID = "siads505";
 
-  const fetchAssignment = async(courseId) => {
+  const fetchAssignment = async (courseId) => {
     const assignmentData = await axios.get(
       ENDPOINT + "assignment/?course=" + courseId,
     );
-    const assignmentId = activeAssignment ? activeAssignment: assignmentData.data[0].id;
+    const assignmentId = assignmentData.data[0].id.toString();
     setAssignments(assignmentData.data);
     setActiveAssignment(assignmentId);
-    return assignmentId
-  }
+    return assignmentId;
+  };
 
-  const fetchQuestion = async(assignmentId) => {
+  const fetchQuestion = async (assignmentId) => {
     const questionData = await axios.get(
       ENDPOINT + "question/?assignment=" + assignmentId,
     );
-    const questionId = activeQuestion ? activeQuestion: questionData.data[0].id;
-    setQuestions(questionData.data)
-    setActiveQuestion(questionId)
-    return questionId
-  }
+    const questionId = questionData.data[0].id.toString();
+    setQuestions(questionData.data);
+    setActiveQuestion(questionId);
+    return questionId;
+  };
 
   const fetchData = async (course) => {
-   const assignmentId = await fetchAssignment(COURSE_ID)
-   const questionId = await fetchQuestion(assignmentId)
+    const assignmentId = await fetchAssignment(COURSE_ID);
+    const questionId = await fetchQuestion(assignmentId);
   };
 
   useEffect(() => {
     fetchData(COURSE_ID);
-    console.log("fetch")
+    console.log("fetch");
   }, []);
 
   const onChangeAssignment = async (newActiveAssignment) => {
-    setActiveAssignment(newActiveAssignment);
-    console.log(newActiveAssignment)
-    setQuestions([])
-    await fetchQuestion(newActiveAssignment)
+    setActiveAssignment(newActiveAssignment.toString());
+    const questionId = await fetchQuestion(newActiveAssignment.toString());
   };
 
   const addAssignment = async () => {
-    const newSeq = assignments[assignments.length - 1].seq + 1;
+    const newSeq =
+      assignments.length >= 1 ? assignments[assignments.length - 1].seq + 1 : 1;
     const body = {
       description: "New Assignment",
       metadata_description: "",
       stub: "",
       metadata_stub: "",
       seq: newSeq,
-      course: COURSE,
+      course: COURSE_ID,
     };
     const response = await axios.post(ENDPOINT + "assignment/", body);
     setAssignments((prev) => [...prev, response.data]);
@@ -69,16 +68,17 @@ function App() {
   };
 
   const updateAssignment = async (targetId, data) => {
-    console.log(data)
-    const response = await axios.patch(`${ENDPOINT}assignment/${targetId}/`, data)
-    const nextAssignments = assignments.map(a => {
+    const response = await axios.patch(
+      `${ENDPOINT}assignment/${targetId}/`,
+      data,
+    );
+    const nextAssignments = assignments.map((a) => {
       if (a.id == targetId) {
-        return response.data
-      }
-      else return a
-    })
-    setAssignments(nextAssignments)
-  }
+        return response.data;
+      } else return a;
+    });
+    setAssignments(nextAssignments);
+  };
 
   const removeAssignment = async (targetId) => {
     const response = await axios.delete(`${ENDPOINT}assignment/${targetId}`);
@@ -99,11 +99,12 @@ function App() {
   };
 
   const onChangeQuestion = (newActiveQuestion) => {
-    setActiveQuestion(newActiveQuestion);
+    setActiveQuestion(newActiveQuestion.toString());
   };
 
   const addQuestion = async () => {
-    const newSeq = questions[questions.length - 1].seq + 1;
+    const newSeq =
+      questions.length >= 1 ? questions[questions.length - 1].seq + 1 : 1;
     const body = {
       description: "New Question",
       metadata_description: "",
@@ -112,30 +113,28 @@ function App() {
       seq: newSeq,
       assignment: Number(activeAssignment),
     };
-    console.log(body)
     const response = await axios.post(ENDPOINT + "question/", body);
     setQuestions((prev) => [...prev, response.data]);
     onChangeQuestion(response.data.id);
   };
 
   const updateQuestion = async (targetId, data) => {
-    console.log(data)
-    const response = await axios.patch(`${ENDPOINT}question/${targetId}/`, data)
-    const nextQuestions = questions.map(a => {
+    const response = await axios.patch(
+      `${ENDPOINT}question/${targetId}/`,
+      data,
+    );
+    const nextQuestions = questions.map((a) => {
       if (a.id == targetId) {
-        return response.data
-      }
-      else return a
-    })
-    setQuestions(nextQuestions)
-  }
+        return response.data;
+      } else return a;
+    });
+    setQuestions(nextQuestions);
+  };
 
   const removeQuestion = async (targetId) => {
     const response = await axios.delete(`${ENDPOINT}question/${targetId}`);
     setQuestions((prev) =>
-      prev.filter(
-        (question) => question.id.toString() !== targetId.toString(),
-      ),
+      prev.filter((question) => question.id.toString() !== targetId.toString()),
     );
     onChangeQuestion(questions[0].id);
   };
@@ -150,38 +149,48 @@ function App() {
 
   return (
     <>
-    <Flex gap="middle" horizontal="true" justify="center">
-      <Tabs
-        type="editable-card"
-        style={{minHeight: "100vh", width: "50vw", padding: 10}}
-        centered
-        activeKey={activeAssignment}
-        onChange={onChangeAssignment}
-        onEdit={onEditAssignment}
-      >
-        {assignments.map((a) => (
-          <TabPane tab={`Assignment ${a.seq}`} key={a.id} closable={true}>
-            <AssignmentForm data={a} updateAssignment={updateAssignment} />
-          </TabPane>
-        ))}
-      </Tabs>
-      <Tabs
-        type="editable-card"
-        style={{minHeight: "100vh", width: "50vw", padding: 10}}
-        centered
-        activeKey={activeQuestion}
-        onChange={onChangeQuestion}
-        onEdit={onEditQuestion}
-      >
-        {questions.map((q) => (
-          <TabPane tab={`Question ${q.seq}`} key={q.id} closable={true}>
-            <QuestionForm data={q} updateQuestion={updateQuestion} />
-          </TabPane>
-        ))}
-      </Tabs>
+      <Flex gap="middle" horizontal="true" justify="center">
+        {assignments.length > 0 && (
+          <Tabs
+            type="editable-card"
+            style={{ minHeight: "100vh", width: "50vw", padding: 10 }}
+            centered
+            activeKey={activeAssignment}
+            onChange={onChangeAssignment}
+            onEdit={onEditAssignment}
+          >
+            {assignments.map((a) => (
+              <TabPane
+                tab={`Assignment ${a.seq}`}
+                key={a.id.toString()}
+                closable={true}
+              >
+                <AssignmentForm data={a} updateAssignment={updateAssignment} />
+              </TabPane>
+            ))}
+          </Tabs>
+        )}
+
+        <Tabs
+          type="editable-card"
+          style={{ minHeight: "100vh", width: "50vw", padding: 10 }}
+          centered
+          activeKey={activeQuestion}
+          onChange={onChangeQuestion}
+          onEdit={onEditQuestion}
+        >
+          {questions.map((q) => (
+            <TabPane
+              tab={`Question ${q.seq}`}
+              key={q.id.toString()}
+              closable={true}
+            >
+              <QuestionForm data={q} updateQuestion={updateQuestion} />
+            </TabPane>
+          ))}
+        </Tabs>
       </Flex>
     </>
-    
   );
 }
 
