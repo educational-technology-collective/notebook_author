@@ -4,7 +4,7 @@ from psycopg2 import connect, sql
 # PostgreSQL settings
 DB_HOST = 'localhost'
 DB_PORT = '5432'
-DB_NAME = 'assignment'
+DB_NAME = 'nbauthor'
 DB_USER = 'mengyanw'
 DB_PASSWORD = 'postgres'
 
@@ -23,7 +23,7 @@ cur = conn.cursor()
 assignments = ['assignment1.ipynb', 'assignment2.ipynb', 'assignment3.ipynb', 'assignment4.ipynb']
 print(f"Loading {len(assignments)} assignment(s) to the database...")
 
-for assignment in assignments:
+for index, assignment in enumerate(assignments):
     f = open(assignment)
     data = json.load(f)
     f.close()
@@ -31,26 +31,30 @@ for assignment in assignments:
     
     if cells[1]['cell_type'] == "markdown":
         print(f"{assignment}: {(len(cells) - 1) // 3} questions in total")
-        query = sql.SQL("INSERT INTO {} (description, metadata_description) VALUES (%s, %s) RETURNING id").format(sql.Identifier("assignment"))
+        query = sql.SQL("INSERT INTO {} (description, metadata_description, seq, course) VALUES (%s, %s, %s, %s) RETURNING id").format(sql.Identifier("nbauthor_assignment"))
         cur.execute(query, (
             json.dumps(cells[0]['source']),
-            json.dumps(cells[0]['metadata'])
+            json.dumps(cells[0]['metadata']),
+            index + 1,
+            "siads505"
         ))
     else:
         print(f"{assignment}: {(len(cells) - 2) // 3} questions in total")
-        query = sql.SQL("INSERT INTO {} (description, stub, metadata_description, metadata_stub) VALUES (%s, %s, %s, %s) RETURNING id").format(sql.Identifier("assignment"))
+        query = sql.SQL("INSERT INTO {} (description, stub, metadata_description, metadata_stub, seq, course) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id").format(sql.Identifier("nbauthor_assignment"))
         cur.execute(query, (
             json.dumps(cells[0]['source']),
             json.dumps(cells[1]['source']),
             json.dumps(cells[0]['metadata']),
-            json.dumps(cells[1]['metadata'])
+            json.dumps(cells[1]['metadata']),
+            index + 1,
+            "siads505"
         ))
     assignment_id = cur.fetchone()[0]
     # Question
-    seq = 0
+    seq = 1
     for i in range(1, len(cells)):
         if cells[i]['cell_type'] == 'markdown':
-            query1 = sql.SQL("INSERT INTO {} (assignment_id, description, stub, metadata_description, metadata_stub, seq) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id").format(sql.Identifier("question"))
+            query1 = sql.SQL("INSERT INTO {} (assignment_id, description, stub, metadata_description, metadata_stub, seq) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id").format(sql.Identifier("nbauthor_question"))
             cur.execute(query1, (
                 assignment_id,
                 json.dumps(cells[i]['source']),
@@ -62,7 +66,7 @@ for assignment in assignments:
             question_id = cur.fetchone()[0]
             
             # solution
-            query2 = sql.SQL("INSERT INTO {} (question_id, stub, category) VALUES (%s, %s, %s) RETURNING id").format(sql.Identifier("solution"))
+            query2 = sql.SQL("INSERT INTO {} (question_id, stub, category) VALUES (%s, %s, %s) RETURNING id").format(sql.Identifier("nbauthor_solution"))
             cur.execute(query2, (
                 question_id,
                 json.dumps(cells[i+1]['source']),
@@ -102,13 +106,13 @@ for assignment in assignments:
             #         test_seq
             #     ))
             #     test_seq += 1
-            cur.execute(sql.SQL("INSERT INTO {} (question_id, stub, metadata_stub, point, category, seq) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id").format(sql.Identifier("test")), (
+            cur.execute(sql.SQL("INSERT INTO {} (question_id, stub, metadata_stub, point, category, seq) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id").format(sql.Identifier("nbauthor_test")), (
                 question_id,
                 json.dumps(cells[i+2]['source']),
                 json.dumps(cells[i+2]['metadata']),
                 0,
                 '',
-                0
+                1
             ))
 
             
