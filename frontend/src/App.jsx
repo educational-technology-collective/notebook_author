@@ -8,10 +8,10 @@ import QuestionForm from "./components/QuestionForm";
 function App() {
   const [assignments, setAssignments] = useState([]);
   const [questions, setQuestions] = useState([]);
-  const [solutions, setSolutions] = useState([]);
   const [tests, setTests] = useState([]);
   const [activeAssignment, setActiveAssignment] = useState("");
   const [activeQuestion, setActiveQuestion] = useState("");
+  const [activeTest, setActiveTest] = useState("");
 
   const ENDPOINT = import.meta.env.VITE_API_URL;
   const COURSE_ID = "siads505";
@@ -30,11 +30,23 @@ function App() {
     const questionData = await axios.get(
       ENDPOINT + "question/?assignment=" + assignmentId,
     );
-    const questionId = questionData.data[0].id.toString();
+    const questionId =
+      questionData.data.length > 0 ? questionData.data[0].id.toString() : "";
     setQuestions(questionData.data);
     setActiveQuestion(questionId);
     return questionId;
   };
+
+  const fetchTest = async (questionId) => {
+    const testData = await axios.get(
+      ENDPOINT + "test/?question=" + questionId,
+    );
+    const testId =
+      testData.data.length > 0 ? testData.data[0].id.toString() : "";
+    setTests(testData.data);
+    setActiveQuestion(questionId);
+    return questionId;
+  }; 
 
   const fetchData = async (course) => {
     const assignmentId = await fetchAssignment(COURSE_ID);
@@ -55,7 +67,7 @@ function App() {
     const newSeq =
       assignments.length >= 1 ? assignments[assignments.length - 1].seq + 1 : 1;
     const body = {
-      description: "New Assignment",
+      description: "",
       metadata_description: "",
       stub: "",
       metadata_stub: "",
@@ -106,12 +118,12 @@ function App() {
     const newSeq =
       questions.length >= 1 ? questions[questions.length - 1].seq + 1 : 1;
     const body = {
-      description: "New Question",
+      description: "",
       metadata_description: "",
       stub: "",
       metadata_stub: "",
       seq: newSeq,
-      assignment: Number(activeAssignment),
+      assignment: activeAssignment,
     };
     const response = await axios.post(ENDPOINT + "question/", body);
     setQuestions((prev) => [...prev, response.data]);

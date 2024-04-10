@@ -1,25 +1,25 @@
 import React from "react";
 import { Form, Input, Button, Flex } from "antd";
 
-const layout = {
-  labelCol: {
-    span: 8,
-  },
-  wrapperCol: {
-    span: 16,
-  },
-};
-
-/* eslint-disable no-template-curly-in-string */
-const validateMessages = {
-  required: "${label} is required!",
-};
-/* eslint-enable no-template-curly-in-string */
-
 const AssignmentForm = (props) => {
   const onFinish = async (values) => {
-    console.log(values);
-    await props.updateAssignment(props.data.id, values);
+    const JSONValues = {
+      course: values?.course,
+      seq: values?.seq,
+      description: values?.description
+        ? JSON.stringify(values.description.match(/[^\n]*\n|[^\n]+/g))
+        : "",
+      metadata_description: values?.metadata_description
+        ? JSON.stringify(JSON.parse(values.metadata_description))
+        : "",
+      stub: values?.stub
+        ? JSON.stringify(values.stub.match(/[^\n]*\n|[^\n]+/g))
+        : "",
+      metadata_stub: values?.metadata_stub
+        ? JSON.stringify(JSON.parse(values.metadata_stub))
+        : "",
+    };
+    await props.updateAssignment(props.data.id, JSONValues);
   };
   return (
     <>
@@ -28,14 +28,29 @@ const AssignmentForm = (props) => {
         name={props.data.id}
         onFinish={onFinish}
         style={{ maxWidth: 800, margin: "auto" }}
-        validateMessages={validateMessages}
         initialValues={{
           course: props.data.course,
           seq: props.data.seq,
-          description: props.data.description,
-          stub: props.data.stub,
-          metadata_description: props.data.metadata_description,
-          metadata_stub: props.data.metadata_stub,
+          // description,
+          // stub,
+          // metadata_description,
+          // metadata_stub
+          description: props.data.description
+            ? JSON.parse(props.data.description)?.join("")
+            : props.data.description,
+          stub: props.data.stub
+            ? JSON.parse(props.data.stub)?.join("")
+            : props.data.stub,
+          metadata_description: props.data.metadata_description
+            ? JSON.stringify(
+                JSON.parse(props.data.metadata_description),
+                undefined,
+                4,
+              )
+            : props.data.metadata_description,
+          metadata_stub: props.data.metadata_stub
+            ? JSON.stringify(JSON.parse(props.data.metadata_stub), undefined, 4)
+            : props.data.metadata_stub,
         }}
         labelAlign="right"
       >
@@ -46,27 +61,29 @@ const AssignmentForm = (props) => {
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <Input.TextArea autoSize={{ minRows: 10 }} />
+          <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
         </Form.Item>
         <Form.Item name="stub" label="Stub">
-          <Input.TextArea autoSize={{ minRows: 10 }} />
+          <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
         </Form.Item>
+
         <Flex justify="space-between">
           <Form.Item
             name="metadata_description"
             label="Metadata - Description"
             style={{ width: "45%" }}
           >
-            <Input.TextArea autoSize={{ minRows: 5 }} />
+            <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
           </Form.Item>
           <Form.Item
             name="metadata_stub"
             label="Metadata - Stub"
             style={{ width: "45%" }}
           >
-            <Input.TextArea autoSize={{ minRows: 5 }} />
+            <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
           </Form.Item>
         </Flex>
+
         <Form.Item>
           <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
             Save Assignment
