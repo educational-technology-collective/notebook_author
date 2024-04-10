@@ -1,9 +1,14 @@
 import { useState, useEffect, useRef } from "react";
-import { Flex, Tabs } from "antd";
-import axios from "axios";
-const { TabPane } = Tabs;
-import AssignmentForm from "./components/AssignmentForm";
-import QuestionForm from "./components/QuestionForm";
+import { Flex } from "antd";
+import {
+  COURSE_ID,
+  fetchAssignment,
+  fetchQuestion,
+  fetchTest,
+} from "./utils/utils";
+import { AssignmentTab } from "./components/AssignmentTab";
+import { QuestionTab } from "./components/QuestionTab";
+import { TestTab } from "./components/TestTab";
 
 function App() {
   const [assignments, setAssignments] = useState([]);
@@ -13,194 +18,54 @@ function App() {
   const [activeQuestion, setActiveQuestion] = useState("");
   const [activeTest, setActiveTest] = useState("");
 
-  const ENDPOINT = import.meta.env.VITE_API_URL;
-  const COURSE_ID = "siads505";
-
-  const fetchAssignment = async (courseId) => {
-    const assignmentData = await axios.get(
-      ENDPOINT + "assignment/?course=" + courseId,
-    );
-    const assignmentId = assignmentData.data[0].id.toString();
-    setAssignments(assignmentData.data);
+  const fetchCourse = async (courseId) => {
+    const [assignmentData, assignmentId] = await fetchAssignment(courseId);
+    setAssignments(assignmentData);
     setActiveAssignment(assignmentId);
-    return assignmentId;
-  };
-
-  const fetchQuestion = async (assignmentId) => {
-    const questionData = await axios.get(
-      ENDPOINT + "question/?assignment=" + assignmentId,
-    );
-    const questionId =
-      questionData.data.length > 0 ? questionData.data[0].id.toString() : "";
-    setQuestions(questionData.data);
+    const [questionData, questionId] = await fetchQuestion(assignmentId);
+    setQuestions(questionData);
     setActiveQuestion(questionId);
-    return questionId;
-  };
-
-  const fetchTest = async (questionId) => {
-    const testData = await axios.get(
-      ENDPOINT + "test/?question=" + questionId,
-    );
-    const testId =
-      testData.data.length > 0 ? testData.data[0].id.toString() : "";
-    setTests(testData.data);
-    setActiveQuestion(questionId);
-    return questionId;
-  }; 
-
-  const fetchData = async (course) => {
-    const assignmentId = await fetchAssignment(COURSE_ID);
-    const questionId = await fetchQuestion(assignmentId);
+    const [testData, testId] = await fetchTest(questionId);
+    setTests(testData);
+    setActiveTest(testId);
   };
 
   useEffect(() => {
-    fetchData(COURSE_ID);
     console.log("fetch");
+    fetchCourse(COURSE_ID);
   }, []);
-
-  const onChangeAssignment = async (newActiveAssignment) => {
-    setActiveAssignment(newActiveAssignment.toString());
-    const questionId = await fetchQuestion(newActiveAssignment.toString());
-  };
-
-  const addAssignment = async () => {
-    const newSeq =
-      assignments.length >= 1 ? assignments[assignments.length - 1].seq + 1 : 1;
-    const body = {
-      description: "",
-      metadata_description: "",
-      stub: "",
-      metadata_stub: "",
-      seq: newSeq,
-      course: COURSE_ID,
-    };
-    const response = await axios.post(ENDPOINT + "assignment/", body);
-    setAssignments((prev) => [...prev, response.data]);
-    onChangeAssignment(response.data.id);
-  };
-
-  const updateAssignment = async (targetId, data) => {
-    const response = await axios.patch(
-      `${ENDPOINT}assignment/${targetId}/`,
-      data,
-    );
-    const nextAssignments = assignments.map((a) => {
-      if (a.id == targetId) {
-        return response.data;
-      } else return a;
-    });
-    setAssignments(nextAssignments);
-  };
-
-  const removeAssignment = async (targetId) => {
-    const response = await axios.delete(`${ENDPOINT}assignment/${targetId}`);
-    setAssignments((prev) =>
-      prev.filter(
-        (assignment) => assignment.id.toString() !== targetId.toString(),
-      ),
-    );
-    onChangeAssignment(assignments[0].id);
-  };
-
-  const onEditAssignment = async (targetId, action) => {
-    if (action === "add") {
-      await addAssignment();
-    } else {
-      await removeAssignment(targetId);
-    }
-  };
-
-  const onChangeQuestion = (newActiveQuestion) => {
-    setActiveQuestion(newActiveQuestion.toString());
-  };
-
-  const addQuestion = async () => {
-    const newSeq =
-      questions.length >= 1 ? questions[questions.length - 1].seq + 1 : 1;
-    const body = {
-      description: "",
-      metadata_description: "",
-      stub: "",
-      metadata_stub: "",
-      seq: newSeq,
-      assignment: activeAssignment,
-    };
-    const response = await axios.post(ENDPOINT + "question/", body);
-    setQuestions((prev) => [...prev, response.data]);
-    onChangeQuestion(response.data.id);
-  };
-
-  const updateQuestion = async (targetId, data) => {
-    const response = await axios.patch(
-      `${ENDPOINT}question/${targetId}/`,
-      data,
-    );
-    const nextQuestions = questions.map((a) => {
-      if (a.id == targetId) {
-        return response.data;
-      } else return a;
-    });
-    setQuestions(nextQuestions);
-  };
-
-  const removeQuestion = async (targetId) => {
-    const response = await axios.delete(`${ENDPOINT}question/${targetId}`);
-    setQuestions((prev) =>
-      prev.filter((question) => question.id.toString() !== targetId.toString()),
-    );
-    onChangeQuestion(questions[0].id);
-  };
-
-  const onEditQuestion = async (targetId, action) => {
-    if (action === "add") {
-      await addQuestion();
-    } else {
-      await removeQuestion(targetId);
-    }
-  };
 
   return (
     <>
       <Flex gap="middle" horizontal="true" justify="center">
-        {assignments.length > 0 && (
-          <Tabs
-            type="editable-card"
-            style={{ minHeight: "100vh", width: "50vw", padding: 10 }}
-            centered
-            activeKey={activeAssignment}
-            onChange={onChangeAssignment}
-            onEdit={onEditAssignment}
-          >
-            {assignments.map((a) => (
-              <TabPane
-                tab={`Assignment ${a.seq}`}
-                key={a.id.toString()}
-                closable={true}
-              >
-                <AssignmentForm data={a} updateAssignment={updateAssignment} />
-              </TabPane>
-            ))}
-          </Tabs>
-        )}
-
-        <Tabs
-          type="editable-card"
-          style={{ minHeight: "100vh", width: "50vw", padding: 10 }}
-          centered
-          activeKey={activeQuestion}
-          onChange={onChangeQuestion}
-          onEdit={onEditQuestion}
-        >
-          {questions.map((q) => (
-            <TabPane
-              tab={`Question ${q.seq}`}
-              key={q.id.toString()}
-              closable={true}
-            >
-              <QuestionForm data={q} updateQuestion={updateQuestion} />
-            </TabPane>
-          ))}
-        </Tabs>
+        <AssignmentTab
+          assignments={assignments}
+          activeAssignment={activeAssignment}
+          setAssignments={setAssignments}
+          setActiveAssignment={setActiveAssignment}
+          setQuestions={setQuestions}
+          setActiveQuestion={setActiveQuestion}
+          setTests={setTests}
+          setActiveTest={setActiveTest}
+        />
+        {/* <Flex gap="middle" vertical="true" align="center"> */}
+        <QuestionTab
+          activeAssignment={activeAssignment}
+          questions={questions}
+          activeQuestion={activeQuestion}
+          setQuestions={setQuestions}
+          setActiveQuestion={setActiveQuestion}
+          setTests={setTests}
+          setActiveTest={setActiveTest}
+        />
+        <TestTab
+          activeQuestion={activeQuestion}
+          tests={tests}
+          activeTest={activeTest}
+          setTests={setTests}
+          setActiveTest={setActiveTest}
+        />
+        {/* </Flex> */}
       </Flex>
     </>
   );

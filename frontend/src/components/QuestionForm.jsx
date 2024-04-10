@@ -24,7 +24,7 @@ const QuestionForm = (props) => {
     <>
       <Form
         layout="vertical"
-        name={props.data.id}
+        name={`Question-${props.data.id}`}
         onFinish={onFinish}
         style={{ maxWidth: 800, margin: "auto" }}
         initialValues={{

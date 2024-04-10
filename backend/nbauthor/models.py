@@ -35,7 +35,7 @@ class Test(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     stub = models.TextField(null=True, blank=True)
     metadata_stub = models.TextField(null=True, blank=True)
-    category = models.CharField(max_length=32)
+    category = models.CharField(max_length=32, null=True, blank=True)
     seq = models.IntegerField()
     point = models.IntegerField()
     

@@ -65,13 +65,13 @@ for index, assignment in enumerate(assignments):
             ))
             question_id = cur.fetchone()[0]
             
-            # solution
-            query2 = sql.SQL("INSERT INTO {} (question_id, stub, category) VALUES (%s, %s, %s) RETURNING id").format(sql.Identifier("nbauthor_solution"))
-            cur.execute(query2, (
-                question_id,
-                json.dumps(cells[i+1]['source']),
-                'instructor'
-            ))
+            # # solution
+            # query2 = sql.SQL("INSERT INTO {} (question_id, stub, category) VALUES (%s, %s, %s) RETURNING id").format(sql.Identifier("nbauthor_solution"))
+            # cur.execute(query2, (
+            #     question_id,
+            #     json.dumps(cells[i+1]['source']),
+            #     'instructor'
+            # ))
            
             # test
             # tests = cells[i+2]['source']
@@ -106,14 +106,14 @@ for index, assignment in enumerate(assignments):
             #         test_seq
             #     ))
             #     test_seq += 1
-            cur.execute(sql.SQL("INSERT INTO {} (question_id, stub, metadata_stub, point, category, seq) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id").format(sql.Identifier("nbauthor_test")), (
-                question_id,
-                json.dumps(cells[i+2]['source']),
-                json.dumps(cells[i+2]['metadata']),
-                0,
-                '',
-                1
-            ))
+            # cur.execute(sql.SQL("INSERT INTO {} (question_id, stub, metadata_stub, point, category, seq) VALUES (%s, %s, %s, %s, %s, %s) RETURNING id").format(sql.Identifier("nbauthor_test")), (
+            #     question_id,
+            #     json.dumps(cells[i+2]['source']),
+            #     json.dumps(cells[i+2]['metadata']),
+            #     0,
+            #     '',
+            #     1
+            # ))
 
             
             print(f"question{seq} loaded")
