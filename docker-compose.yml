@@ -5,11 +5,13 @@ services:
       dockerfile: Dockerfile
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py runserver 0.0.0.0:8000"
+             python manage.py runserver 0.0.0.0:9102"
     volumes:
       - ./backend:/app/backend
     ports:
-      - 8000:8000
+      - 9102:9102
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
 
   frontend:
     build: 
@@ -19,7 +21,7 @@ services:
       - ./frontend:/app/frontend
       - /app/frontend/node_modules/
     ports:
-      - 5173:5173
+      - 9173:9173
     depends_on:
       - backend
 

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-ki*60-6dq_0rnd95i)yd(w=y)%!c$r!r9biv501jm#0ngazq+$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -44,7 +44,7 @@ INSTALLED_APPS = [
     'nbauthor',
 ]
 
-CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://localhost:9173']
 CORS_ALLOW_ALL_ORIGINS = True
 
 MIDDLEWARE = [
