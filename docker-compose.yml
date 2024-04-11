@@ -1,0 +1,54 @@
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app/backend
+    ports:
+      - 8000:8000
+
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules/
+    ports:
+      - 5173:5173
+    depends_on:
+      - backend
+
+# services:
+#   web:
+#     build: .
+#     command: >
+#       sh -c "python manage.py migrate &&
+#              python manage.py runserver 0.0.0.0:8000"
+#     volumes:
+#       - .:/app
+#     ports:
+#       - 8000:8000
+#     depends_on:
+#       - db
+#     links:
+#       - db:db
+#     networks:
+#       - djangonetwork
+#   db:
+#     image: postgres
+#     volumes: 
+#       - ./data/db:/var/lib/postgresql/data
+#     environment:
+#       - POSTGRES_DB=postgres
+#       - POSTGRES_USER=mengyanw
+#       - POSTGRES_PASSWORD=postgres
+#     networks:
+#       - djangonetwork
+# networks:
+#   djangonetwork:
+#       driver: bridge
