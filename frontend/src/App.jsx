@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef } from "react";
-import { Flex } from "antd";
+import { useState, useEffect } from "react";
+import { Flex, Divider } from "antd";
 import {
   COURSE_ID,
   fetchAssignment,
@@ -48,6 +48,7 @@ function App() {
           setTests={setTests}
           setActiveTest={setActiveTest}
         />
+        <Divider type="vertical" style={{ height: "100vh" }} />
         {/* <Flex gap="middle" vertical="true" align="center"> */}
         <QuestionTab
           activeAssignment={activeAssignment}
@@ -58,6 +59,7 @@ function App() {
           setTests={setTests}
           setActiveTest={setActiveTest}
         />
+        <Divider type="vertical" style={{ height: "100vh" }} />
         <TestTab
           activeQuestion={activeQuestion}
           tests={tests}
