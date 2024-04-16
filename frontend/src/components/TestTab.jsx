@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useEffect } from "react";
 import { Tabs } from "antd";
 const { TabPane } = Tabs;
 import { ENDPOINT } from "../utils/utils";
@@ -22,7 +23,7 @@ export const TestTab = ({
       metadata_stub: "",
       seq: newSeq,
       point: 0,
-      category: "private",
+      category: "other",
       question: activeQuestion,
     };
     const response = await axios.post(ENDPOINT + "test/", body);
@@ -56,9 +57,31 @@ export const TestTab = ({
     }
   };
 
+  const categoryColorMap = {
+    private: "#ffccc7",
+    public: "#d9f7be",
+    other: "#fbfbfb",
+  };
+
+  useEffect(() => {
+    const testTabs = document
+      ?.getElementById("test")
+      ?.getElementsByClassName("ant-tabs-nav-list")[0]
+      ?.getElementsByClassName("ant-tabs-tab");
+    for (let i = 0; i < testTabs.length; i++) {
+      testTabs.item(i).style.backgroundColor =
+        categoryColorMap[
+          tests.find(
+            (t) => t.id == testTabs.item(i).getAttribute("data-node-key"),
+          ).category
+        ];
+    }
+  });
+
   return (
     <>
       <Tabs
+        id="test"
         type="editable-card"
         style={{ width: "34vw", padding: "0.5vw", paddingLeft: 0 }}
         size="small"
