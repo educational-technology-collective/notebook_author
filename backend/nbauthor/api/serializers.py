@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Serializer, FileField
 from ..models import Assignment, Question, Solution, Test
 
 class AssignmentSerializer(ModelSerializer):
@@ -20,4 +20,9 @@ class TestSerializer(ModelSerializer):
     class Meta:
         model = Test
         fields = '__all__' 
+
+class UploadSerializer(Serializer):
+    file_uploaded = FileField()
+    class Meta:
+        fields = ['file_upload']
         

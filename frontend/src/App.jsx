@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Flex, Divider } from "antd";
+import { Flex, Divider, Upload } from "antd";
 import {
   COURSE_ID,
   fetchAssignment,
@@ -9,6 +9,7 @@ import {
 import { AssignmentTab } from "./components/AssignmentTab";
 import { QuestionTab } from "./components/QuestionTab";
 import { TestTab } from "./components/TestTab";
+import { UploadButton } from "./components/UploadButton";
 
 function App() {
   const [assignments, setAssignments] = useState([]);
@@ -37,6 +38,7 @@ function App() {
 
   return (
     <>
+      <UploadButton fetchCourse={fetchCourse} />
       <Flex gap="middle" horizontal="true" justify="center">
         <AssignmentTab
           assignments={assignments}
