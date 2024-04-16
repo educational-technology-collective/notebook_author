@@ -22,7 +22,7 @@ export const TestTab = ({
       metadata_stub: "",
       seq: newSeq,
       point: 0,
-      category: "",
+      category: "private",
       question: activeQuestion,
     };
     const response = await axios.post(ENDPOINT + "test/", body);
@@ -60,7 +60,7 @@ export const TestTab = ({
     <>
       <Tabs
         type="editable-card"
-        style={{ width: "37vw", padding: 10 }}
+        style={{ width: "34vw", padding: "0.5vw", paddingLeft: 0 }}
         size="small"
         tabPosition="left"
         activeKey={activeTest}

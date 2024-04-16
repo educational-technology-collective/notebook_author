@@ -21,7 +21,7 @@ class TestSerializer(ModelSerializer):
         model = Test
         fields = '__all__' 
 
-class UploadSerializer(Serializer):
+class FileSerializer(Serializer):
     file_uploaded = FileField()
     class Meta:
         fields = ['file_upload']

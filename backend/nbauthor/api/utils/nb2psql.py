@@ -61,7 +61,7 @@ def nb2psql(f):
                 json.dumps(cells[i]['source']),
                 json.dumps(cells[i+1]['source']),
                 json.dumps(cells[i]['metadata']),
-                json.dumps(cells[1+1]['metadata']),
+                json.dumps(cells[i+1]['metadata']),
                 seq
             ))
             question_id = cur.fetchone()[0]

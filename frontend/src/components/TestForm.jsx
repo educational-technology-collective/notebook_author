@@ -63,7 +63,7 @@ const TestForm = (props) => {
           />
         </Form.Item>
         <Form.Item name="stub" label="Stub">
-          <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
+          <Input.TextArea autoSize={{ minRows: 5, maxRows: 25 }} />
         </Form.Item>
         <Form.Item name="metadata_stub" label="Metadata">
           <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />

@@ -9,7 +9,8 @@ import {
 import { AssignmentTab } from "./components/AssignmentTab";
 import { QuestionTab } from "./components/QuestionTab";
 import { TestTab } from "./components/TestTab";
-import { UploadButton } from "./components/UploadButton";
+import { ImportButton } from "./components/ImportButton";
+import { ExportButton } from "./components/ExportButton";
 
 function App() {
   const [assignments, setAssignments] = useState([]);
@@ -38,7 +39,12 @@ function App() {
 
   return (
     <>
-      <UploadButton fetchCourse={fetchCourse} />
+      <Divider />
+      <Flex gap="large" horizontal="true" justify="center" align="center">
+        <ImportButton fetchCourse={fetchCourse} />
+        <ExportButton assignmentId={activeAssignment} />
+      </Flex>
+      <Divider />
       <Flex gap="middle" horizontal="true" justify="center">
         <AssignmentTab
           assignments={assignments}
@@ -71,6 +77,7 @@ function App() {
         />
         {/* </Flex> */}
       </Flex>
+      <Divider />
     </>
   );
 }

@@ -55,7 +55,7 @@ const QuestionForm = (props) => {
           <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
         </Form.Item>
         <Form.Item name="stub" label="Stub">
-          <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
+          <Input.TextArea autoSize={{ minRows: 5, maxRows: 15 }} />
         </Form.Item>
 
         <Flex justify="space-between">

@@ -70,7 +70,10 @@ export const QuestionTab = ({
     <>
       <Tabs
         type="editable-card"
-        style={{ width: "30vw", padding: 10 }}
+        style={{
+          width: "30vw",
+          padding: "0.5vw",
+        }}
         size="small"
         activeKey={activeQuestion}
         onChange={onChangeQuestion}

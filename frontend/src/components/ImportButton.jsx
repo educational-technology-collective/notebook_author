@@ -3,10 +3,10 @@ import { UploadOutlined } from "@ant-design/icons";
 import { Button, message, Upload } from "antd";
 import { ENDPOINT, COURSE_ID } from "../utils/utils";
 
-export const UploadButton = ({ fetchCourse }) => {
+export const ImportButton = ({ fetchCourse }) => {
   const props = {
     name: "file",
-    action: `${ENDPOINT}upload/`,
+    action: `${ENDPOINT}file/`,
     headers: {
       authorization: "authorization-text",
     },
