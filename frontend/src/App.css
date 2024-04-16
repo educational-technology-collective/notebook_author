@@ -1,5 +1,6 @@
 #root {
-  max-width: 1280px;
+  /* max-width: 1280px; */
+  width: 100%;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
@@ -47,4 +48,12 @@
 
 .ant-tabs-content-holder {
   display: flex;
+}
+
+.ant-tabs-tab .ant-tabs-tab-remove {
+  color: rgb(255, 137, 137);
+}
+
+.ant-tabs-tab .ant-tabs-tab-remove:hover {
+  color: rgb(255, 0, 0);
 }
