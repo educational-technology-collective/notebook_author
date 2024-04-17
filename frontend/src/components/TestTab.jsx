@@ -68,12 +68,16 @@ export const TestTab = ({
       ?.getElementsByClassName("ant-tabs-nav-list")[0]
       ?.getElementsByClassName("ant-tabs-tab");
     for (let i = 0; i < testTabs.length; i++) {
-      testTabs.item(i).style.backgroundColor =
-        categoryColorMap[
-          tests.find(
-            (t) => t.id == testTabs.item(i).getAttribute("data-node-key"),
-          ).category
-        ];
+      let targetTest = tests.find(
+        (t) => t.id == testTabs.item(i).getAttribute("data-node-key"),
+      );
+      if (targetTest.metadata_stub) {
+        console.log(targetTest);
+        testTabs.item(i).style.backgroundColor = "#ff7875";
+      } else {
+        testTabs.item(i).style.backgroundColor =
+          categoryColorMap[targetTest.category];
+      }
     }
   });
 
