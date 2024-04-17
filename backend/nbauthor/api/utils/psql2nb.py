@@ -58,20 +58,19 @@ def psql2nb(id):
                 "outputs": [],
                 "source": json.loads(question[3] or 'null') or []
             })
-            query3 = sql.SQL(f"select metadata_stub, stub, point from nbauthor_test where question_id = {question[4]} and category <> 'other'")
+            query3 = sql.SQL(f"select metadata_stub, stub, category from nbauthor_test where question_id = {question[4]} and category <> 'other'")
             cur.execute(query3)
             tests = cur.fetchall()
             if tests is not None:
                 for test in tests:
-                    metadata = json.loads(test[0] or 'null')
-                    if metadata:
-                        metadata['point'] = test[2]
-                    else:
-                        metadata = {'point': test[2]}
+                    source = json.loads(test[1] or 'null') or []
+                    if test[2] == 'private':
+                        source = ["### BEGIN HIDDEN TESTS\n"] + source + ["\n### END HIDDEN TESTS"]
+                        print(source)
                     cells.append({
                         "cell_type": "code",
-                        "metadata": metadata,
-                        "source": json.loads(test[1] or 'null') or []
+                        "metadata": json.loads(test[0] or 'null') or {},
+                        "source": source
                     })
             print(f"question{question[4]} loaded")
 

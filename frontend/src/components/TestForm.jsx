@@ -5,7 +5,6 @@ const TestForm = (props) => {
   const onFinish = async (values) => {
     const JSONValues = {
       seq: values?.seq,
-      point: values?.point,
       category: values?.category,
       stub: values?.stub
         ? JSON.stringify(values.stub.match(/[^\n]*\n|[^\n]+/g))
@@ -25,7 +24,6 @@ const TestForm = (props) => {
         style={{ maxWidth: 800, margin: "auto" }}
         initialValues={{
           seq: props.data.seq,
-          point: props.data.point,
           category: props.data.category,
           stub: props.data.stub
             ? JSON.parse(props.data.stub)?.join("")
@@ -37,9 +35,6 @@ const TestForm = (props) => {
         labelAlign="right"
       >
         <Form.Item name="seq" label="Order">
-          <Input />
-        </Form.Item>
-        <Form.Item name="point" label="Point">
           <Input />
         </Form.Item>
         <Form.Item name="category" label="Category">

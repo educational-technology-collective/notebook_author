@@ -22,7 +22,6 @@ export const TestTab = ({
       stub: "",
       metadata_stub: "",
       seq: newSeq,
-      point: 0,
       category: "other",
       question: activeQuestion,
     };

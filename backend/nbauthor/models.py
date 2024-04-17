@@ -37,7 +37,6 @@ class Test(models.Model):
     metadata_stub = models.TextField(null=True, blank=True)
     category = models.CharField(max_length=32, null=True, blank=True)
     seq = models.IntegerField()
-    point = models.IntegerField()
     
     def __str__(self):
         return f"Test: {self.stub}"
