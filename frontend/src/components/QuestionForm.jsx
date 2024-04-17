@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, Button, Flex } from "antd";
+import CodeMirrorWrapper from "./CodeMirrorWrapper";
 
 const QuestionForm = (props) => {
   const onFinish = async (values) => {
@@ -52,10 +53,10 @@ const QuestionForm = (props) => {
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
+          <CodeMirrorWrapper options={{ mode: "markdown" }} />
         </Form.Item>
         <Form.Item name="stub" label="Stub">
-          <Input.TextArea autoSize={{ minRows: 5, maxRows: 15 }} />
+          <CodeMirrorWrapper options={{ mode: "python" }} />
         </Form.Item>
 
         <Flex justify="space-between">
@@ -64,14 +65,14 @@ const QuestionForm = (props) => {
             label="Metadata - Description"
             style={{ width: "45%" }}
           >
-            <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
+            <CodeMirrorWrapper options={{ mode: "javascript" }} />
           </Form.Item>
           <Form.Item
             name="metadata_stub"
             label="Metadata - Stub"
             style={{ width: "45%" }}
           >
-            <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
+            <CodeMirrorWrapper options={{ mode: "javascript" }} />
           </Form.Item>
         </Flex>
 

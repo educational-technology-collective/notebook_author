@@ -81,10 +81,8 @@ export const AssignmentTab = ({
     <Tabs
       type="editable-card"
       style={{
-        minHeight: "100",
         width: "30vw",
         padding: "0.5vw",
-        overflow: "scroll",
       }}
       size="small"
       activeKey={activeAssignment}

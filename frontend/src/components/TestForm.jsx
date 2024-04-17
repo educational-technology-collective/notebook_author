@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, Button, Select, Flex } from "antd";
+import CodeMirrorWrapper from "./CodeMirrorWrapper";
 
 const TestForm = (props) => {
   const onFinish = async (values) => {
@@ -58,10 +59,10 @@ const TestForm = (props) => {
           />
         </Form.Item>
         <Form.Item name="stub" label="Stub">
-          <Input.TextArea autoSize={{ minRows: 5, maxRows: 25 }} />
+          <CodeMirrorWrapper options={{ mode: "python" }} />
         </Form.Item>
         <Form.Item name="metadata_stub" label="Metadata">
-          <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
+          <CodeMirrorWrapper options={{ mode: "javascript" }} />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit" style={{ width: "100%" }}>

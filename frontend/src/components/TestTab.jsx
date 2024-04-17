@@ -72,7 +72,6 @@ export const TestTab = ({
         (t) => t.id == testTabs.item(i).getAttribute("data-node-key"),
       );
       if (targetTest.metadata_stub) {
-        console.log(targetTest);
         testTabs.item(i).style.backgroundColor = "#ff7875";
       } else {
         testTabs.item(i).style.backgroundColor =

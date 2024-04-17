@@ -1,5 +1,6 @@
 import React from "react";
 import { Form, Input, Button, Flex } from "antd";
+import CodeMirrorWrapper from "./CodeMirrorWrapper";
 
 const AssignmentForm = (props) => {
   const onFinish = async (values) => {
@@ -31,10 +32,6 @@ const AssignmentForm = (props) => {
         initialValues={{
           course: props.data.course,
           seq: props.data.seq,
-          // description,
-          // stub,
-          // metadata_description,
-          // metadata_stub
           description: props.data.description
             ? JSON.parse(props.data.description)?.join("")
             : props.data.description,
@@ -61,26 +58,25 @@ const AssignmentForm = (props) => {
           <Input />
         </Form.Item>
         <Form.Item name="description" label="Description">
-          <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
+          <CodeMirrorWrapper options={{ mode: "markdown" }} />
         </Form.Item>
         <Form.Item name="stub" label="Stub">
-          <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
+          <CodeMirrorWrapper options={{ mode: "python" }} />
         </Form.Item>
-
         <Flex justify="space-between">
           <Form.Item
             name="metadata_description"
             label="Metadata - Description"
             style={{ width: "45%" }}
           >
-            <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
+            <CodeMirrorWrapper options={{ mode: "javascript" }} />
           </Form.Item>
           <Form.Item
             name="metadata_stub"
             label="Metadata - Stub"
             style={{ width: "45%" }}
           >
-            <Input.TextArea autoSize={{ minRows: 5, maxRows: 10 }} />
+            <CodeMirrorWrapper options={{ mode: "javascript" }} />
           </Form.Item>
         </Flex>
 

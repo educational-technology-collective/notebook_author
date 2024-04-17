@@ -13,7 +13,9 @@
   "dependencies": {
     "antd": "^5.16.1",
     "axios": "^1.6.8",
+    "codemirror": "^5.65.16",
     "react": "^18.2.0",
+    "react-codemirror2": "^8.0.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
@@ -27,7 +29,7 @@
     "vite": "^5.2.0"
   },
   "optionalDependencies": {
-    "@rollup/rollup-linux-x64-gnu": "4.6.1",
-    "@rollup/rollup-linux-arm64-musl": "4.14.1"
+    "@rollup/rollup-linux-arm64-musl": "4.14.1",
+    "@rollup/rollup-linux-x64-gnu": "4.6.1"
   }
 }

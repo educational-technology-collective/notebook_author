@@ -3,7 +3,7 @@
   width: 100%;
   margin: 0 auto;
   padding: 2rem;
-  text-align: center;
+  /* text-align: center; */
 }
 
 .logo {
@@ -56,4 +56,24 @@
 
 .ant-tabs-tab .ant-tabs-tab-remove:hover {
   color: rgb(255, 0, 0);
+}
+
+.react-codemirror2 {
+  flex: 1 1 auto;
+  margin-top: 0;
+  height: 100%;
+  position: relative;
+}
+
+.CodeMirror {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100% !important;
+}
+
+.CodeMirror * {
+  font-size: 12px;
 }
