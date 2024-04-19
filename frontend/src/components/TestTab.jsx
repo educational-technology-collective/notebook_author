@@ -1,7 +1,9 @@
 import axios from "axios";
 import { useEffect } from "react";
-import { Tabs } from "antd";
+import { Tabs, Modal } from "antd";
 const { TabPane } = Tabs;
+const { confirm } = Modal;
+import { ExclamationCircleFilled } from "@ant-design/icons";
 import { ENDPOINT } from "../utils/utils";
 import TestForm from "./TestForm";
 
@@ -48,11 +50,21 @@ export const TestTab = ({
     onChangeTest(tests[0].id);
   };
 
+  const showConfirm = async (targetId) => {
+    confirm({
+      title: "Are you sure to delete this test?",
+      icon: <ExclamationCircleFilled />,
+      async onOk() {
+        await removeTest(targetId);
+      },
+    });
+  };
+
   const onEditTest = async (targetId, action) => {
     if (action === "add") {
       await addTest();
     } else {
-      await removeTest(targetId);
+      await showConfirm(targetId);
     }
   };
 

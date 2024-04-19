@@ -1,6 +1,8 @@
 import axios from "axios";
-import { Tabs } from "antd";
+import { Tabs, Modal } from "antd";
 const { TabPane } = Tabs;
+const { confirm } = Modal;
+import { ExclamationCircleFilled } from "@ant-design/icons";
 import { COURSE_ID, ENDPOINT, fetchQuestion, fetchTest } from "../utils/utils";
 import AssignmentForm from "./AssignmentForm";
 
@@ -69,11 +71,21 @@ export const AssignmentTab = ({
     onChangeAssignment(assignments[0].id);
   };
 
+  const showConfirm = async (targetId) => {
+    confirm({
+      title: "Are you sure to delete this assignment?",
+      icon: <ExclamationCircleFilled />,
+      async onOk() {
+        await removeAssignment(targetId);
+      },
+    });
+  };
+
   const onEditAssignment = async (targetId, action) => {
     if (action === "add") {
       await addAssignment();
     } else {
-      await removeAssignment(targetId);
+      await showConfirm(targetId);
     }
   };
 

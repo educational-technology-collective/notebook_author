@@ -1,6 +1,8 @@
 import axios from "axios";
-import { Tabs } from "antd";
+import { Tabs, Modal } from "antd";
 const { TabPane } = Tabs;
+const { confirm } = Modal;
+import { ExclamationCircleFilled } from "@ant-design/icons";
 import { ENDPOINT, fetchTest } from "../utils/utils";
 import QuestionForm from "./QuestionForm";
 
@@ -58,11 +60,21 @@ export const QuestionTab = ({
     onChangeQuestion(questions[0].id);
   };
 
+  const showConfirm = async (targetId) => {
+    confirm({
+      title: "Are you sure to delete this question?",
+      icon: <ExclamationCircleFilled />,
+      async onOk() {
+        await removeQuestion(targetId);
+      },
+    });
+  };
+
   const onEditQuestion = async (targetId, action) => {
     if (action === "add") {
       await addQuestion();
     } else {
-      await removeQuestion(targetId);
+      await showConfirm(targetId);
     }
   };
 
