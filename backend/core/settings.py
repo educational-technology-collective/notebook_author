@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+import os
+import requests
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
+    'django.contrib.auth',
+    'mozilla_django_oidc',  # Load after auth
 
     'rest_framework',
     'django_filters',
@@ -46,6 +51,18 @@ INSTALLED_APPS = [
 
 CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://localhost:9173']
 CORS_ALLOW_ALL_ORIGINS = True
+
+AUTHENTICATION_BACKENDS = (
+    'mozilla_django_oidc.auth.OIDCAuthenticationBackend',
+)
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'mozilla_django_oidc.contrib.drf.OIDCAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        # other authentication classes, if needed
+    ],
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -135,3 +152,18 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+OIDC_RP_CLIENT_ID = os.getenv('OIDC_RP_CLIENT_ID','')
+OIDC_RP_CLIENT_SECRET = os.getenv('OIDC_RP_CLIENT_SECRET','')
+
+r = requests.get(os.environ.get('OIDC_WK', 'https://shibboleth.umich.edu/.well-known/openid-configuration')).json()
+
+OIDC_OP_AUTHORIZATION_ENDPOINT = r['authorization_endpoint']
+OIDC_OP_TOKEN_ENDPOINT = r['token_endpoint']
+OIDC_OP_USER_ENDPOINT = r['userinfo_endpoint']
+OIDC_RP_SIGN_ALGO = 'RS256'
+OIDC_OP_JWKS_ENDPOINT = r['jwks_uri']
+OIDC_USERNAME_ALGO = 'umich.auth.generate_username'
+OIDC_RP_SCOPES = 'openid email profile x509'
+OIDC_CREATE_USER = True
+LOGIN_URL = '/oidc/authenticate/'
