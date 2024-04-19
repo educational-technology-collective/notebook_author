@@ -61,7 +61,6 @@ def psql2nb(id):
                     source = json.loads(test[1] or 'null') or []
                     if test[2] == 'private':
                         source = ["### BEGIN HIDDEN TESTS\n"] + source + ["\n### END HIDDEN TESTS"]
-                        print(source)
                     cells.append({
                         "cell_type": "code",
                         "metadata": json.loads(test[0] or 'null') or {},
