@@ -1,24 +1,19 @@
 import json
 from psycopg2 import connect, sql
-
-# PostgreSQL settings
-DB_HOST = 'localhost'
-DB_PORT = '5432'
-DB_NAME = 'nbauthor'
-DB_USER = 'mengyanw'
-DB_PASSWORD = 'postgres'
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 def psql2nb(id):
     # Establishing connection to PostgreSQL
     conn = connect(
-        dbname=DB_NAME,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        host=DB_HOST,
-        port=DB_PORT
+        dbname=os.getenv("DB_NAME"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        host=os.getenv("DB_HOST"),
+        port=int(os.getenv("DB_PORT"))
     )
     cur = conn.cursor()
-
 
     query1 = sql.SQL(f"select metadata_description, description, metadata_stub, stub, id from nbauthor_assignment where id = {id}")
     cur.execute(query1)
